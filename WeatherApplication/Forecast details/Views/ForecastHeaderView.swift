@@ -9,13 +9,42 @@ import UIKit
 
 class ForecastHeaderView: UIView {
     
-    private let currentDateLabel = UILabel()
-    private let conditionImage = UIImageView()
+    private let currentDateLabel: UILabel = {
+        let label = UILabel()
+        label.text = "Fri, 15 Dec"
+        label.font = UIFont.systemFont(ofSize: 20)
+        label.textColor = .white
+        return label
+    }()
+    
+    private let conditionImage: UIImageView = {
+        let imageView = UIImageView()
+        imageView.image = UIImage(systemName: "cloud.sun.bolt")
+        imageView.tintColor = .white
+        imageView.contentMode = .scaleAspectFit
+        return imageView
+    }()
+    
+    private let conditionStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .horizontal
+        stackView.alignment = .center
+        stackView.distribution = .equalSpacing
+        stackView.spacing = 30
+        return stackView
+    }()
+    
+    private let infoStackView: UIStackView = {
+        let stackView = UIStackView()
+        stackView.axis = .vertical
+        stackView.distribution = .fillProportionally
+        stackView.spacing = 10
+        return stackView
+    }()
+    
     private let tempView = InfoView(imageName: "thermometer.sun.fill")
     private let humidityView = InfoView(imageName: "humidity.fill")
     private let windView = InfoView(imageName: "wind")
-    private let infoStackView = UIStackView()
-    private let conditionStackView = UIStackView()
 
     override init(frame: CGRect) {
         super.init(frame: frame)
@@ -27,47 +56,23 @@ class ForecastHeaderView: UIView {
     
     private func configureViews() {
         backgroundColor = UIColor(named: "weatherBlue")
-        configureCurrentDateLabel()
-        configureConditionImage()
         configureStackViews()
     }
     
     private func constrainViews() {
-        setupCurrentDateLabel()
-        setupConditionImage()
-        setupConditionStackView()
-        
-        translatesAutoresizingMaskIntoConstraints = false
-        heightAnchor.constraint(equalTo: widthAnchor, multiplier: 0.8).isActive = true
+        constrainCurrentDateLabel()
+        constrainConditionImage()
+        constrainConditionStackView()
     }
-
 }
 
-//MARK: - Configure views
+// MARK: - Configure views
 
 extension ForecastHeaderView {
-    private func configureCurrentDateLabel() {
-        currentDateLabel.text = "Fri, 15 Dec"
-        currentDateLabel.font = UIFont.systemFont(ofSize: 20)
-        currentDateLabel.textColor = .white
-    }
-    
-    private func configureConditionImage() {
-        conditionImage.image = UIImage(systemName: "cloud.sun.bolt")
-        conditionImage.tintColor = .white
-        conditionImage.contentMode = .scaleAspectFit
-    }
-    
     private func configureStackViews() {
-        infoStackView.axis = .vertical
-        infoStackView.distribution = .fillProportionally
-        infoStackView.spacing = 10
-        infoStackView.addArrangedSubviews(tempView, humidityView, windView)
-        
-        conditionStackView.axis = .horizontal
-        conditionStackView.alignment = .center
-        conditionStackView.distribution = .equalSpacing
-        conditionStackView.spacing = 30
+        infoStackView.addArrangedSubviews(tempView,
+                                          humidityView,
+                                          windView)
         conditionStackView.addArrangedSubviews(conditionImage,
                                                infoStackView)
     }
@@ -77,7 +82,7 @@ extension ForecastHeaderView {
 // MARK: - Constrain views
 
 extension ForecastHeaderView {
-    private func setupCurrentDateLabel() {
+    private func constrainCurrentDateLabel() {
         addConstrainedSubview(currentDateLabel)
         NSLayoutConstraint.activate([
             currentDateLabel.topAnchor.constraint(equalTo: layoutMarginsGuide.topAnchor),
@@ -86,14 +91,14 @@ extension ForecastHeaderView {
         ])
     }
     
-    private func setupConditionImage() {
+    private func constrainConditionImage() {
         NSLayoutConstraint.activate([
             conditionImage.heightAnchor.constraint(equalToConstant: 150),
             conditionImage.widthAnchor.constraint(equalToConstant: 150),
         ])
     }
     
-    private func setupConditionStackView() {
+    private func constrainConditionStackView() {
         addConstrainedSubview(conditionStackView)
         NSLayoutConstraint.activate([
             conditionStackView.centerXAnchor.constraint(equalTo: centerXAnchor),

@@ -14,6 +14,11 @@ enum WeatherAPI {
             
             struct HourlyForecast: Decodable {
                 let list: [Hourly]
+                let city: City
+                
+                struct City: Decodable {
+                    let name: String
+                }
                 
                 struct Hourly: Decodable {
                     let date: Date
@@ -54,6 +59,7 @@ enum WeatherAPI {
                         }
                     }
                 }
+                
             }
         }
         
