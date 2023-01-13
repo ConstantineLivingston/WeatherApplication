@@ -71,11 +71,12 @@ extension ForecastViewController: UITableViewDataSource {
         let cell = tableView
             .dequeueReusableCell(withIdentifier: UITableViewCell.reuseIdentifier,
                                                  for: indexPath)
-        let forecast = forecastPresenter.weather?.hourlyList[indexPath.row]
         var configuration = cell.dailyConfiguration()
-        configuration.dayText = forecast?.day
-        configuration.tempText = "\(forecast!.tempMax)/\(forecast!.tempMin)"
-        configuration.conditionImage = UIImage(named: forecast!.icon)
+        if let forecast = forecastPresenter.weather?.hourlyList[indexPath.row] {
+            configuration.dayText = forecast.day
+            configuration.tempText = "\(forecast.tempMax)/\(forecast.tempMin)"
+            configuration.conditionImage = UIImage(named: forecast.icon)
+        }
         cell.contentConfiguration = configuration
         return cell
     }
